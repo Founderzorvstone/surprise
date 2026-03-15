@@ -3,125 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise for Nazo Appi!</title>
+    <title>Happy Birthday Nazo Appi!</title>
     <style>
-        body { margin: 0; overflow-x: hidden; font-family: 'Arial', sans-serif; background: #000; color: white; text-align: center; }
-        #screen1, #screen2 { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #screen3 { display: none; padding: 50px 20px; background: #111; min-height: 100vh; }
-        
-        /* Gift Box Animation */
-        .box { font-size: 120px; cursor: pointer; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        
-        /* Text Animations */
-        #bday-text { font-size: 3.5rem; color: #ff4081; text-shadow: 0 0 20px #ff4081; margin-bottom: 10px; }
-        #details { font-size: 2rem; color: #ffd700; opacity: 0; transition: 2s; }
-        
-        /* Professional Button */
-        .btn { 
-            margin-top: 50px; padding: 15px 40px; font-size: 1.2rem; cursor: pointer;
-            background: linear-gradient(45deg, #ff4081, #7c4dff); color: white;
-            border: none; border-radius: 50px; font-weight: bold; display: none;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            /* Birthday themed background */
+            background: #ff9a9e;
+            background-image: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
         }
 
-        /* Falling Items */
-        .falling { position: absolute; top: -50px; animation: fall linear infinite; z-index: 999; pointer-events: none; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-        /* Award & Cards */
-        .award { background: gold; color: black; padding: 20px; border-radius: 15px; margin-bottom: 30px; font-weight: bold; border: 5px solid white; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: #222; padding: 20px; border-radius: 15px; border: 1px solid #444; }
-        .card a { color: #00e5ff; text-decoration: none; font-weight: bold; display: block; margin-top: 10px; }
-        iframe { width: 100%; height: 200px; border-radius: 10px; border: none; }
+        .container {
+            z-index: 5;
+            padding: 20px;
+        }
+
+        /* The Gift Box */
+        .box-container {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .box-container:hover { transform: scale(1.1); }
+
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            background: #e74c3c;
+            position: relative;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #f1c40f;
+            left: 60px;
+        }
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: #f1c40f;
+            top: 60px;
+            left: 0;
+        }
+
+        /* Surprise Content */
+        #surprise {
+            display: none;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        h1 { font-family: 'Pacifico', cursive; color: #d63031; font-size: 3rem; margin-bottom: 10px; }
+        p { color: #2d3436; font-size: 1.2rem; }
+
+        /* Links Section */
+        .links-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .links-section h3 { color: #0984e3; margin-bottom: 15px; }
+        .link-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background: #6c5ce7;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            width: 80%;
+            max-width: 300px;
+            transition: 0.3s;
+        }
+        .link-btn:hover { background: #a29bfe; transform: translateY(-3px); }
+
+        /* Award Button */
+        .award-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: #f1c40f;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 1.1rem;
+        }
+
+        /* Award Modal */
+        #award-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+        .medal {
+            font-size: 100px;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.2); } }
+        .close-award { margin-top: 20px; color: white; cursor: pointer; text-decoration: underline; }
+
     </style>
 </head>
 <body>
 
-    <div id="player" style="position:absolute; top:-9999px;"></div>
+    <canvas id="canvas"></canvas>
 
-    <div id="screen1">
-        <div class="box" onclick="startSurprise()">🎁</div>
-        <h2 style="color: gold; margin-top: 20px;">CLICK HERE</h2>
-    </div>
+    <div class="container">
+        <div id="box-wrapper" class="box-container" onclick="revealSurprise()">
+            <div class="gift-box"></div>
+            <h2 style="color: #d63031; margin-top: 20px;">Tap to Open Surprise!</h2>
+        </div>
 
-    <div id="screen2" style="display:none;">
-        <h1 id="bday-text">Happy Birthday Nazo Appi!</h1>
-        <h2 id="details">Silver Jubilee<br>1 Jan 2026</h2>
-        <button id="giftBtn" class="btn" onclick="showGifts()">Apne Gifts Dekhe 🎁</button>
-    </div>
+        <div id="surprise">
+            <h1>Happy Birthday Nazo Appi! 🎂</h1>
+            <p>Future Computer Scientist, aapke liye ye chota sa digital gift!</p>
+            
+            <button class="award-btn" onclick="showAward()">🏆 Click for Special Award</button>
 
-    <div id="screen3">
-        <div class="award">🏆 OFFICIAL BEST APPI AWARD 🏆</div>
-        <div class="grid">
-            <div class="card">
-                <h3>🎭 Kapil Sharma Show</h3>
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLzufeTFnhupz9q_NEXzEi9oG4_v84ZzFq"></iframe>
-            </div>
-            <div class="card">
-                <h3>📚 Free Books (PDFDrive)</h3>
-                <a href="https://www.pdfdrive.com/" target="_blank">Click to Read Books</a>
-            </div>
-            <div class="card">
-                <h3>🧠 Huberman Lab</h3>
-                <a href="https://www.youtube.com/@hubermanlab" target="_blank">Watch on YouTube</a>
+            <div class="links-section">
+                <h3>📚 Learning Resources for You:</h3>
+                <a href="https://www.pdfdrive.com" target="_blank" class="link-btn">PDF Drive (Books)</a>
+                <a href="https://youtube.com/@hubermanlab" target="_blank" class="link-btn">Huberman Lab (Science)</a>
+                <a href="https://youtube.com/@briantracyofficial" target="_blank" class="link-btn">Brian Tracy (Success)</a>
+                <a href="https://youtube.com/@gauravgupta6685" target="_blank" class="link-btn">Gaurav Gupta (Tech)</a>
             </div>
         </div>
     </div>
 
+    <div id="award-screen">
+        <div class="medal">🥇</div>
+        <h1 style="color: #f1c40f;">BEST APPI EVER</h1>
+        <p>This award is officially presented to you by your favorite brother!</p>
+        <div class="close-award" onclick="document.getElementById('award-screen').style.display='none'">Back to Party</div>
+    </div>
+
+    <audio id="firework-sound" src="https://assets.mixkit.co/active_storage/sfx/614/614-preview.mp3"></audio>
+    <audio id="bday-song" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
     <script>
-        // YouTube API Load
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0', width: '0',
-                videoId: 'uS37hL2_vE0', // Professional Birthday Song
-                events: { 'onReady': onPlayerReady }
-            });
-        }
-        function onPlayerReady(event) { /* Ready to play */ }
-
-        function startSurprise() {
-            document.getElementById('screen1').style.display = 'none';
-            document.getElementById('screen2').style.display = 'flex';
+        function revealSurprise() {
+            // Hide Box
+            document.getElementById('box-wrapper').style.display = 'none';
+            // Show Content
+            document.getElementById('surprise').style.display = 'block';
             
-            // Play Music
-            player.playVideo();
+            // Play Sounds
+            document.getElementById('firework-sound').play();
+            document.getElementById('bday-song').play();
 
-            // Start Confetti
-            setInterval(createConfetti, 150);
-
-            // Silver Jubilee after 7 sec
-            setTimeout(() => {
-                document.getElementById('details').style.opacity = '1';
-            }, 7000);
-
-            // Show Gift Button
-            setTimeout(() => {
-                document.getElementById('giftBtn').style.display = 'block';
-            }, 9000);
+            // Start Firecrackers (Canvas)
+            initFireworks();
         }
 
-        function showGifts() {
-            document.getElementById('screen2').style.display = 'none';
-            document.getElementById('screen3').style.display = 'block';
+        function showAward() {
+            document.getElementById('award-screen').style.display = 'flex';
         }
 
-        function createConfetti() {
-            const icons = ['🎈', '🎊', '🎁', '🎀', '✨'];
-            const el = document.createElement('div');
-            el.className = 'falling';
-            el.innerText = icons[Math.floor(Math.random()*icons.length)];
-            el.style.left = Math.random() * 100 + 'vw';
-            el.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 5000);
+        // Firecrackers Logic
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        function initFireworks() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+            animate();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 10 - 5;
+                this.speedY = Math.random() * 10 - 5;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
         }
     </script>
 </body>
