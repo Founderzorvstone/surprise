@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise for Nazo Appi!</title>
+    <style>
+        body { margin: 0; overflow-x: hidden; font-family: 'Arial', sans-serif; background: #000; color: white; text-align: center; }
+        #screen1, #screen2 { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #screen3 { display: none; padding: 50px 20px; background: #111; min-height: 100vh; }
+        
+        /* Gift Box Animation */
+        .box { font-size: 120px; cursor: pointer; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        /* Text Animations */
+        #bday-text { font-size: 3.5rem; color: #ff4081; text-shadow: 0 0 20px #ff4081; margin-bottom: 10px; }
+        #details { font-size: 2rem; color: #ffd700; opacity: 0; transition: 2s; }
+        
+        /* Professional Button */
+        .btn { 
+            margin-top: 50px; padding: 15px 40px; font-size: 1.2rem; cursor: pointer;
+            background: linear-gradient(45deg, #ff4081, #7c4dff); color: white;
+            border: none; border-radius: 50px; font-weight: bold; display: none;
+        }
+
+        /* Falling Items */
+        .falling { position: absolute; top: -50px; animation: fall linear infinite; z-index: 999; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        /* Award & Cards */
+        .award { background: gold; color: black; padding: 20px; border-radius: 15px; margin-bottom: 30px; font-weight: bold; border: 5px solid white; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #222; padding: 20px; border-radius: 15px; border: 1px solid #444; }
+        .card a { color: #00e5ff; text-decoration: none; font-weight: bold; display: block; margin-top: 10px; }
+        iframe { width: 100%; height: 200px; border-radius: 10px; border: none; }
+    </style>
+</head>
+<body>
+
+    <div id="player" style="position:absolute; top:-9999px;"></div>
+
+    <div id="screen1">
+        <div class="box" onclick="startSurprise()">🎁</div>
+        <h2 style="color: gold; margin-top: 20px;">CLICK HERE</h2>
+    </div>
+
+    <div id="screen2" style="display:none;">
+        <h1 id="bday-text">Happy Birthday Nazo Appi!</h1>
+        <h2 id="details">Silver Jubilee<br>1 Jan 2026</h2>
+        <button id="giftBtn" class="btn" onclick="showGifts()">Apne Gifts Dekhe 🎁</button>
+    </div>
+
+    <div id="screen3">
+        <div class="award">🏆 OFFICIAL BEST APPI AWARD 🏆</div>
+        <div class="grid">
+            <div class="card">
+                <h3>🎭 Kapil Sharma Show</h3>
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLzufeTFnhupz9q_NEXzEi9oG4_v84ZzFq"></iframe>
+            </div>
+            <div class="card">
+                <h3>📚 Free Books (PDFDrive)</h3>
+                <a href="https://www.pdfdrive.com/" target="_blank">Click to Read Books</a>
+            </div>
+            <div class="card">
+                <h3>🧠 Huberman Lab</h3>
+                <a href="https://www.youtube.com/@hubermanlab" target="_blank">Watch on YouTube</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // YouTube API Load
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0',
+                videoId: 'uS37hL2_vE0', // Professional Birthday Song
+                events: { 'onReady': onPlayerReady }
+            });
+        }
+        function onPlayerReady(event) { /* Ready to play */ }
+
+        function startSurprise() {
+            document.getElementById('screen1').style.display = 'none';
+            document.getElementById('screen2').style.display = 'flex';
+            
+            // Play Music
+            player.playVideo();
+
+            // Start Confetti
+            setInterval(createConfetti, 150);
+
+            // Silver Jubilee after 7 sec
+            setTimeout(() => {
+                document.getElementById('details').style.opacity = '1';
+            }, 7000);
+
+            // Show Gift Button
+            setTimeout(() => {
+                document.getElementById('giftBtn').style.display = 'block';
+            }, 9000);
+        }
+
+        function showGifts() {
+            document.getElementById('screen2').style.display = 'none';
+            document.getElementById('screen3').style.display = 'block';
+        }
+
+        function createConfetti() {
+            const icons = ['🎈', '🎊', '🎁', '🎀', '✨'];
+            const el = document.createElement('div');
+            el.className = 'falling';
+            el.innerText = icons[Math.floor(Math.random()*icons.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 5000);
+        }
+    </script>
+</body>
+</html>
